@@ -1,0 +1,12 @@
+{
+  "name": "aver-web",
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/style.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.21"
+  }
+}
