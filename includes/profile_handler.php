@@ -1,61 +1,96 @@
 <?php
-// Include database and configuration files
-require_once 'db.php'; // db connection
-require_once 'config.php'; // config for database
+// /includes/profile_handler.php
 
-// Ensure the user is logged in before accessing the profile
-session_start();
+require_once 'config.php';
+require_once 'db.php';
+require_once 'session.php'; // Handles session + auth helpers
 
-if (!isset($_SESSION['user_id'])) {
+header('Content-Type: application/json');
+
+// Validate method
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    exit;
+}
+
+// Auth check
+if (!isLoggedIn()) {
     echo json_encode(['success' => false, 'message' => 'User not logged in']);
     exit;
 }
 
 $action = $_POST['action'] ?? '';
 
-if ($action === 'getProfile') {
-    // Get user profile information
-    $userId = $_SESSION['user_id'];
+switch ($action) {
+    case 'getProfile':
+        getProfile($pdo);
+        break;
 
-    // Query to fetch user profile
-    $stmt = $pdo->prepare("SELECT nickname, country, bio FROM users WHERE id = :id");
-    $stmt->execute(['id' => $userId]);
+    case 'saveProfile':
+        saveProfile($pdo);
+        break;
 
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    default:
+        echo json_encode(['success' => false, 'message' => 'Unknown action']);
+        break;
+}
 
-    if ($user) {
-        echo json_encode(['success' => true, 'user' => $user]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Profile not found']);
-    }
+// =============================
+// HANDLERS
+// =============================
 
-} elseif ($action === 'saveProfile') {
-    // Save updated profile information
-    $nickname = $_POST['nickname'];
-    $country = $_POST['country'];
-    $bio = $_POST['bio'];
+function getProfile(PDO $pdo): void {
+    $userId = getUserId();
 
-    // Validate input fields
-    if (empty($nickname) || empty($country) || empty($bio)) {
-        echo json_encode(['success' => false, 'message' => 'All fields are required']);
-        exit;
-    }
+    try {
+        $stmt = $pdo->prepare("SELECT nickname, country, bio FROM users WHERE id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $userId = $_SESSION['user_id'];
-
-    // Update the user's profile
-    $stmt = $pdo->prepare("UPDATE users SET nickname = :nickname, country = :country, bio = :bio WHERE id = :id");
-    $result = $stmt->execute([
-        'nickname' => $nickname,
-        'country' => $country,
-        'bio' => $bio,
-        'id' => $userId
-    ]);
-
-    if ($result) {
-        echo json_encode(['success' => true, 'message' => 'Profile updated successfully']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to update profile']);
+        if ($user) {
+            echo json_encode(['success' => true, 'user' => $user]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Profile not found']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
 }
-?>
+
+function saveProfile(PDO $pdo): void {
+    $userId  = getUserId();
+    $nickname = trim($_POST['nickname'] ?? '');
+    $country  = trim($_POST['country'] ?? '');
+    $bio      = trim($_POST['bio'] ?? '');
+
+    // Basic validation
+    if (!$nickname || !$country || !$bio) {
+        echo json_encode(['success' => false, 'message' => 'All fields are required']);
+        return;
+    }
+
+    try {
+        $stmt = $pdo->prepare("
+            UPDATE users 
+            SET nickname = :nickname, country = :country, bio = :bio 
+            WHERE id = :id
+        ");
+
+        $success = $stmt->execute([
+            'nickname' => htmlspecialchars($nickname),
+            'country'  => htmlspecialchars($country),
+            'bio'      => htmlspecialchars($bio),
+            'id'       => $userId
+        ]);
+
+        // Clear cached session data
+        clearUserCache();
+
+        echo json_encode([
+            'success' => $success,
+            'message' => $success ? 'Profile updated successfully' : 'Failed to update profile'
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    }
+}

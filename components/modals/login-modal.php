@@ -1,5 +1,5 @@
 <div 
-  x-show="showLogin" 
+  x-show="$store.auth.showLogin" 
   x-cloak 
   x-transition:enter="transition ease-out duration-300"
   x-transition:enter-start="opacity-0 scale-90"
@@ -13,7 +13,7 @@
 
     <!-- Close Button -->
     <button 
-      @click="showLogin = false" 
+      @click="$store.auth.closeAll()" 
       class="absolute top-3 right-3 text-gray-400 hover:text-white text-xl"
     >
       &times;
@@ -24,7 +24,6 @@
 
     <!-- Login Form -->
     <form id="loginForm" class="space-y-4">
-
       <input 
         type="text" 
         name="username" 
@@ -60,5 +59,6 @@
         </button>
       </div>
     </form>
+
   </div>
 </div>

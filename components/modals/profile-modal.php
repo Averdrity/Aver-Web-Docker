@@ -1,5 +1,5 @@
 <div 
-  x-show="showProfile" 
+  x-show="$store.auth.showProfile" 
   x-cloak 
   x-transition:enter="transition ease-out duration-300"
   x-transition:enter-start="opacity-0 scale-90"
@@ -13,7 +13,7 @@
 
     <!-- Close Button -->
     <button 
-      @click="showProfile = false" 
+      @click="$store.auth.closeAll()" 
       class="absolute top-3 right-3 text-gray-400 hover:text-white text-xl"
     >
       &times;

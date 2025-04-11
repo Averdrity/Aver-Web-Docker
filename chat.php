@@ -1,4 +1,9 @@
-<?php require_once('components/header.php'); ?>
+<?php
+require_once('components/header.php');
+require_once('components/modals/login-modal.php');
+require_once('components/modals/register-modal.php');
+require_once('components/modals/profile-modal.php');
+?>
 
 <main class="flex h-[calc(100vh-64px)] bg-gray-900 text-white">
 
@@ -68,3 +73,4 @@
 
 <?php require_once('components/footer.php'); ?>
 <script src="/assets/js/chat.js" defer></script>
+<script src="/assets/js/main.js" defer></script>

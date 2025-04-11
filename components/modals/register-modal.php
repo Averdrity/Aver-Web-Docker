@@ -1,5 +1,5 @@
 <div 
-  x-show="showRegister" 
+  x-show="$store.auth.showRegister" 
   x-cloak 
   x-transition:enter="transition ease-out duration-300"
   x-transition:enter-start="opacity-0 scale-90"
@@ -13,7 +13,7 @@
 
     <!-- Close Button -->
     <button 
-      @click="showRegister = false" 
+      @click="$store.auth.closeAll()" 
       class="absolute top-3 right-3 text-gray-400 hover:text-white text-xl"
     >
       &times;
@@ -26,12 +26,11 @@
 
     <!-- Register Form -->
     <form id="registerForm" class="space-y-4">
-
       <input 
         type="text" 
         name="username" 
         placeholder="Username" 
-        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" 
         required
       >
 
@@ -39,7 +38,7 @@
         type="email" 
         name="email" 
         placeholder="Email" 
-        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" 
         required
       >
 
@@ -47,7 +46,7 @@
         type="password" 
         name="password" 
         placeholder="Password" 
-        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" 
         required
       >
 
@@ -55,17 +54,19 @@
         type="password" 
         name="confirm_password" 
         placeholder="Confirm Password" 
-        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        class="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" 
         required
       >
 
-      <button 
-        type="submit" 
-        class="w-full bg-green-600 hover:bg-green-700 transition text-white font-semibold py-2 rounded-md"
-      >
-        Register
-      </button>
-
+      <!-- Buttons -->
+      <div class="flex justify-end pt-2">
+        <button 
+          type="submit" 
+          class="bg-green-600 hover:bg-green-700 transition text-white font-semibold px-5 py-2 rounded-md"
+        >
+          Register
+        </button>
+      </div>
     </form>
   </div>
 </div>
