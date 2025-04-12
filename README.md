@@ -224,4 +224,64 @@ Aver-Web is a **modern, AI-powered personal assistant platform** designed with:
 
 ## 🧱 Folder Structure
 
-<pre lang="text"> ```text C:\Projects\Aver-Web ├── apache │ └── 000-default.conf ├── db-data │ └── (contents hidden) ├── src │ ├── api │ │ ├── chat.php │ │ └── web_search.php │ ├── assets │ │ ├── css │ │ │ ├── style.css │ │ │ └── tailwind.css │ │ ├── icons │ │ │ └── (contents hidden) │ │ ├── js │ │ │ ├── chat.js │ │ │ └── main.js │ │ ├── aw_logo_transparent_64x64.png │ │ └── favicon.ico │ ├── auth │ │ ├── login.php │ │ ├── logout.php │ │ ├── profile.php │ │ └── register.php │ ├── components │ │ ├── modals │ │ │ ├── login-modal.php │ │ │ ├── memory-modal.php │ │ │ ├── profile-modal.php │ │ │ ├── register-modal.php │ │ │ └── uploaded-files-modal.php │ │ ├── footer.php │ │ └── header.php │ ├── data │ │ └── patterns.json │ ├── includes │ │ ├── auth_handler.php │ │ ├── chat_handler.php │ │ ├── config.php │ │ ├── db.php │ │ ├── memory_fetcher.php │ │ ├── memory_handler.php │ │ ├── pattern_detector.php │ │ ├── profile_handler.php │ │ ├── session.php │ │ ├── theme_handler.php │ │ └── upload_handler.php │ ├── node_modules │ │ └── (contents hidden) │ ├── public │ ├── uploads │ ├── .gitignore │ ├── .htaccess │ ├── chat.php │ ├── index.php │ ├── package.json │ ├── package-lock.json │ ├── postcss.config.js │ └── tailwind.config.js ├── docker-compose.yml └── Dockerfile ``` </pre>
+```text
+C:\Projects\Aver-Web
+/aver-web/apache/000-default.conf
+/aver-web/db-data/ (contents hidden)
+└── src/
+    └── api/
+        ├── chat.php
+        └── web_search.php
+    └── assets/
+        └── css/
+            ├── style.css
+            └── tailwind.css
+        └── icons/ (contents hidden)
+        └── js/
+            ├── chat.js
+            └── main.js
+        ├── aw_logo_transparent_64x64.png
+        └── favicon.ico
+    └── auth/
+        ├── login.php
+        ├── logout.php
+        ├── profile.php
+        └── register.php
+    └── components/
+        └── modals/
+            ├── login-modal.php
+            ├── memory-modal.php
+            ├── profile-modal.php
+            ├── register-modal.php
+            └── uploaded-files-modal.php
+        ├── footer.php
+        └── header.php
+    └── data/
+        └── patterns.json
+    └── includes/
+        ├── auth_handler.php
+        ├── chat_handler.php
+        ├── config.php
+        ├── db.php
+        ├── memory_fetcher.php
+        ├── memory_handler.php
+        ├── pattern_detector.php
+        ├── profile_handler.php
+        ├── session.php
+        ├── theme_handler.php
+        └── upload_handler.php
+    └── node_modules/ (contents hidden)
+    └── public/
+    └── uploads/
+    ├── .gitignore
+    ├── .htaccess
+    ├── chat.php
+    ├── index.php
+    ├── package.json
+    ├── package-lock.json
+    ├── postcss.config.js
+    └── tailwind.config.js
+/docker-compose.yml
+/Dockerfile
+```
+
