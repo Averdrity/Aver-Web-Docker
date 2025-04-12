@@ -1,0 +1,183 @@
+[
+    {
+      "pattern": "(?i)\\bmy name is\\s+(\\w+)",
+      "title": "User Name",
+      "content": "The user's name is {1}.",
+      "topic": "Identity",
+      "category": "Profile",
+      "tags": ["name", "identity", "user_info"],
+      "priority": 10
+    },
+    {
+      "pattern": "(?i)\\bi (am|’m|'m) from\\s+([a-zA-Z\\s]+)",
+      "title": "User Location",
+      "content": "The user is from {2}.",
+      "topic": "Location",
+      "category": "Profile",
+      "tags": ["location", "country", "personal"],
+      "priority": 9
+    },
+    {
+      "pattern": "(?i)\\bi work as (an?|the)?\\s*([a-zA-Z\\s]+)",
+      "title": "Profession",
+      "content": "The user works as a {2}.",
+      "topic": "Career",
+      "category": "Work",
+      "tags": ["career", "job", "profession"],
+      "priority": 9
+    },
+    {
+      "pattern": "(?i)\\bi (love|like|enjoy)\\s+([a-zA-Z\\s]+)",
+      "title": "Interests or Favorites",
+      "content": "The user enjoys {2}.",
+      "topic": "Interests",
+      "category": "Personal",
+      "tags": ["interest", "likes", "favorites"],
+      "priority": 8
+    },
+    {
+      "pattern": "(?i)\\bi hate\\s+([a-zA-Z\\s]+)",
+      "title": "Dislikes",
+      "content": "The user dislikes {1}.",
+      "topic": "Dislikes",
+      "category": "Personal",
+      "tags": ["dislikes", "negative"],
+      "priority": 6
+    },
+    {
+      "pattern": "(?i)\\bi (have|own) (a|an)?\\s*([a-zA-Z\\s]+) pet",
+      "title": "Pet Ownership",
+      "content": "The user has a pet: {3}.",
+      "topic": "Pets",
+      "category": "Lifestyle",
+      "tags": ["pets", "animals"],
+      "priority": 7
+    },
+    {
+      "pattern": "(?i)\\bi speak\\s+([a-zA-Z,\\s]+)",
+      "title": "Languages",
+      "content": "The user speaks {1}.",
+      "topic": "Languages",
+      "category": "Skills",
+      "tags": ["language", "communication"],
+      "priority": 7
+    },
+    {
+      "pattern": "(?i)\\bi (am|’m|'m) diagnosed with\\s+([a-zA-Z\\s]+)",
+      "title": "Health Condition",
+      "content": "The user is diagnosed with {2}.",
+      "topic": "Health",
+      "category": "Medical",
+      "tags": ["health", "diagnosis"],
+      "priority": 10
+    },
+    {
+      "pattern": "(?i)\\bi take\\s+([a-zA-Z\\s]+)\\s+for\\s+(adhd|focus|anxiety|energy)",
+      "title": "Medication",
+      "content": "The user takes {1} for {2}.",
+      "topic": "Health",
+      "category": "Medical",
+      "tags": ["medication", "wellbeing"],
+      "priority": 10
+    },
+    {
+      "pattern": "(?i)\\bi use\\s+(obsidian|notion|chatgpt|ollama|gpt4all|tiptap)",
+      "title": "Productivity Tool",
+      "content": "The user uses {1} as a productivity tool.",
+      "topic": "Tools",
+      "category": "Technology",
+      "tags": ["software", "productivity", "tech"],
+      "priority": 8
+    },
+    {
+      "pattern": "(?i)\\bi'm working on\\s+([a-zA-Z\\s]+)",
+      "title": "Current Project",
+      "content": "The user is currently working on {1}.",
+      "topic": "Projects",
+      "category": "Work",
+      "tags": ["projects", "work"],
+      "priority": 9
+    },
+    {
+      "pattern": "(?i)\\bmy goal is to\\s+([a-zA-Z\\s]+)",
+      "title": "Personal Goal",
+      "content": "The user's goal is to {1}.",
+      "topic": "Goals",
+      "category": "Personal Development",
+      "tags": ["goals", "motivation"],
+      "priority": 9
+    },
+    {
+      "pattern": "(?i)\\bi usually\\s+([a-zA-Z\\s]+)",
+      "title": "Routine",
+      "content": "The user usually {1}.",
+      "topic": "Habits",
+      "category": "Lifestyle",
+      "tags": ["habit", "routine"],
+      "priority": 6
+    },
+    {
+      "pattern": "(?i)\\bi live with\\s+([a-zA-Z\\s]+)",
+      "title": "Living Arrangement",
+      "content": "The user lives with {1}.",
+      "topic": "Relationships",
+      "category": "Personal",
+      "tags": ["family", "home"],
+      "priority": 7
+    },
+    {
+      "pattern": "(?i)\\bmy partner is\\s+([a-zA-Z\\s]+)",
+      "title": "Partner Info",
+      "content": "The user's partner is {1}.",
+      "topic": "Relationships",
+      "category": "Personal",
+      "tags": ["partner", "relationships"],
+      "priority": 8
+    },
+    {
+      "pattern": "(?i)\\bi feel\\s+([a-zA-Z\\s]+)",
+      "title": "Feelings",
+      "content": "The user feels {1}.",
+      "topic": "Emotions",
+      "category": "Mental Health",
+      "tags": ["emotions", "feelings"],
+      "priority": 5
+    },
+    {
+      "pattern": "(?i)\\bmy birthday is\\s+(\\d{1,2}(st|nd|rd|th)?\\s+[a-zA-Z]+)",
+      "title": "Birthday",
+      "content": "The user's birthday is {1}.",
+      "topic": "Identity",
+      "category": "Profile",
+      "tags": ["birthday", "personal"],
+      "priority": 7
+    },
+    {
+      "pattern": "(?i)\\bi'm studying\\s+([a-zA-Z\\s]+)",
+      "title": "Education",
+      "content": "The user is studying {1}.",
+      "topic": "Learning",
+      "category": "Education",
+      "tags": ["studies", "learning", "school"],
+      "priority": 8
+    },
+    {
+      "pattern": "(?i)\\bi plan to travel to\\s+([a-zA-Z\\s]+)",
+      "title": "Travel Plans",
+      "content": "The user plans to travel to {1}.",
+      "topic": "Travel",
+      "category": "Personal Goals",
+      "tags": ["travel", "plans"],
+      "priority": 6
+    },
+    {
+      "pattern": "(?i)\\bmy website is\\s+(https?:\\/\\/[\\w\\.-]+)",
+      "title": "Personal Website",
+      "content": "The user's website is {1}.",
+      "topic": "Web Presence",
+      "category": "Technology",
+      "tags": ["website", "portfolio"],
+      "priority": 8
+    }
+  ]
+  

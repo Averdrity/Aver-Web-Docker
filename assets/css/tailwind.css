@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Prevent Alpine modals from flashing */
-[x-cloak] {
-  display: none !important;
+[x-cloak] { display: none !important; }
+
+html {
+  font-family: theme('fontFamily.sans');
 }

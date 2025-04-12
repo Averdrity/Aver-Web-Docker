@@ -1,90 +1,116 @@
 <?php
-// /src/includes/chat_handler.php
+// /includes/chat_handler.php
 
-require_once(__DIR__ . '/config.php');
-require_once(__DIR__ . '/auth.php');
+require_once 'config.php';
+require_once 'db.php';
+require_once 'session.php';
 
 header('Content-Type: application/json');
 
-// Require login
+// Ensure user is logged in
 if (!isLoggedIn()) {
-  echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-  exit;
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    exit;
 }
 
-$userId = $_SESSION['user_id'];
+$userId = getUserId();
 $action = $_POST['action'] ?? null;
 
-try {
-  switch ($action) {
+// Route by action
+switch ($action) {
     case 'save':
-      saveChat($userId);
-      break;
+        handleSaveChat($pdo, $userId);
+        break;
+
     case 'load':
-      loadChats($userId);
-      break;
-    case 'delete':
-      deleteChat($userId);
-      break;
+        handleLoadChats($pdo, $userId);
+        break;
+
     case 'rename':
-      renameChat($userId);
-      break;
+        handleRenameChat($pdo, $userId);
+        break;
+
+    case 'delete':
+        handleDeleteChat($pdo, $userId);
+        break;
+
     default:
-      echo json_encode(['success' => false, 'message' => 'Invalid action']);
-  }
-} catch (Exception $e) {
-  echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        echo json_encode(['success' => false, 'message' => 'Invalid or missing action.']);
+        break;
 }
 
-exit;
+// ========== HANDLERS ==========
 
-// -----------------------------
-// Chat Actions
-// -----------------------------
+function handleSaveChat($pdo, $userId) {
+    $title = trim($_POST['title'] ?? 'Untitled');
+    $messages = json_decode($_POST['messages'] ?? '[]', true);
 
-function saveChat($userId) {
-  global $pdo;
+    if (!$messages || !is_array($messages)) {
+        echo json_encode(['success' => false, 'message' => 'Invalid message format.']);
+        return;
+    }
 
-  $title = $_POST['title'] ?? 'Untitled';
-  $messages = $_POST['messages'] ?? [];
-
-  $stmt = $pdo->prepare("INSERT INTO chats (user_id, title, content) VALUES (?, ?, ?)");
-  $stmt->execute([$userId, $title, json_encode($messages)]);
-
-  echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
+    try {
+        $stmt = $pdo->prepare("INSERT INTO chats (user_id, title, content) VALUES (?, ?, ?)");
+        $stmt->execute([
+            $userId,
+            htmlspecialchars(mb_substr($title, 0, 100)),
+            json_encode($messages)
+        ]);
+        echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'DB Error: ' . $e->getMessage()]);
+    }
 }
 
-function loadChats($userId) {
-  global $pdo;
+function handleLoadChats($pdo, $userId) {
+    try {
+        $stmt = $pdo->prepare("SELECT id, title, content, created_at FROM chats WHERE user_id = ? ORDER BY created_at DESC");
+        $stmt->execute([$userId]);
+        $chats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-  $stmt = $pdo->prepare("SELECT id, title, content, created_at FROM chats WHERE user_id = ? ORDER BY created_at DESC");
-  $stmt->execute([$userId]);
-  $chats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-  echo json_encode(['success' => true, 'chats' => $chats]);
+        echo json_encode(['success' => true, 'chats' => $chats]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Failed to load chats.']);
+    }
 }
 
-function deleteChat($userId) {
-  global $pdo;
+function handleRenameChat($pdo, $userId) {
+    $chatId = $_POST['chat_id'] ?? null;
+    $newTitle = trim($_POST['title'] ?? '');
 
-  $chatId = $_POST['chat_id'] ?? null;
-  if (!$chatId) throw new Exception("Missing chat ID");
+    if (!$chatId || !$newTitle) {
+        echo json_encode(['success' => false, 'message' => 'Missing data.']);
+        return;
+    }
 
-  $stmt = $pdo->prepare("DELETE FROM chats WHERE id = ? AND user_id = ?");
-  $stmt->execute([$chatId, $userId]);
+    try {
+        $stmt = $pdo->prepare("UPDATE chats SET title = ? WHERE id = ? AND user_id = ?");
+        $stmt->execute([
+            htmlspecialchars(mb_substr($newTitle, 0, 100)),
+            $chatId,
+            $userId
+        ]);
 
-  echo json_encode(['success' => true]);
+        echo json_encode(['success' => true]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Rename failed.']);
+    }
 }
 
-function renameChat($userId) {
-  global $pdo;
+function handleDeleteChat($pdo, $userId) {
+    $chatId = $_POST['chat_id'] ?? null;
+    if (!$chatId) {
+        echo json_encode(['success' => false, 'message' => 'Missing chat ID.']);
+        return;
+    }
 
-  $chatId = $_POST['chat_id'] ?? null;
-  $newTitle = $_POST['title'] ?? null;
-  if (!$chatId || !$newTitle) throw new Exception("Missing data");
+    try {
+        $stmt = $pdo->prepare("DELETE FROM chats WHERE id = ? AND user_id = ?");
+        $stmt->execute([$chatId, $userId]);
 
-  $stmt = $pdo->prepare("UPDATE chats SET title = ? WHERE id = ? AND user_id = ?");
-  $stmt->execute([$newTitle, $chatId, $userId]);
-
-  echo json_encode(['success' => true]);
+        echo json_encode(['success' => true]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Delete failed.']);
+    }
 }
