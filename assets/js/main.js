@@ -1,30 +1,27 @@
+// main.js – Aver-Web Global UI Logic 🌗🧠🛠️
+// Version: 2.2.0 – Fully synced with hybrid theme, Alpine stores, and all modal/form logic
+
 document.addEventListener('DOMContentLoaded', () => {
   // ================================
   // 🌗 Dark/Light Theme Toggle
   // ================================
-  const toggle = document.getElementById('themeToggle');
-  const html = document.documentElement;
-  const isLoggedIn = document.body.dataset.loggedIn === 'true'; // optional
-
-  const applyTheme = (theme) => {
-    if (theme === 'dark') {
-      html.classList.add('dark');
-      toggle.checked = false;
-    } else {
-      html.classList.remove('dark');
-      toggle.checked = true;
-    }
-  };
-
-  let theme = localStorage.getItem('theme') || 'dark';
-  applyTheme(theme);
-
-  if (toggle) {
-    toggle.addEventListener('change', async () => {
-      theme = toggle.checked ? 'light' : 'dark';
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const isLoggedIn = document.body.dataset.loggedIn === 'true';
+  
+    const applyTheme = (theme) => {
+      html.classList.toggle('dark', theme === 'dark');
+      if (toggle) toggle.checked = theme === 'light';
+    };
+  
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+  
+    toggle?.addEventListener('change', async () => {
+      const theme = toggle.checked ? 'light' : 'dark';
       applyTheme(theme);
       localStorage.setItem('theme', theme);
-
+  
       if (isLoggedIn) {
         try {
           await fetch('/includes/theme_handler.php', {
@@ -35,11 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error('[Theme Save Error]', err);
         }
       }
-    });
-  }
+    });  
 
   // ================================
-  // 🔁 Reusable Form Submission Handler
+  // 🔁 Reusable Form Submit Handler
   // ================================
   const sendForm = (formId, action, endpoint, successMsg = null, reloadOnSuccess = true) => {
     const form = document.getElementById(formId);
@@ -51,11 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.append('action', action);
 
       try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          body: formData
-        });
-
+        const res = await fetch(endpoint, { method: 'POST', body: formData });
         const text = await res.text();
         let data;
         try {
@@ -80,15 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ================================
-  // 🔍 Load Profile into Profile Modal Form
+  // 🧠 Load Profile into Modal
   // ================================
   window.loadProfile = async () => {
     try {
       const res = await fetch('/includes/profile_handler.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ action: 'getProfile' }),
       });
 
@@ -114,36 +104,78 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ================================
-  // 🧠 Alpine Global Modal Store
-  // ================================
-  document.addEventListener('alpine:init', () => {
-    Alpine.store('modals', {
-      showLogin: false,
-      showRegister: false,
-      showProfile: false
-    });
-
-    Alpine.data('modals', () => ({
-      get showLogin() { return Alpine.store('modals').showLogin },
-      set showLogin(val) { Alpine.store('modals').showLogin = val },
-
-      get showRegister() { return Alpine.store('modals').showRegister },
-      set showRegister(val) { Alpine.store('modals').showRegister = val },
-
-      get showProfile() { return Alpine.store('modals').showProfile },
-      set showProfile(val) {
-        Alpine.store('modals').showProfile = val;
-        if (val && typeof loadProfile === 'function') {
-          loadProfile();
-        }
-      }
-    }));
-  });
-
-  // ================================
-  // 🧾 Bind Modal Form Submissions
+  // 🧾 Bind Modal Forms
   // ================================
   sendForm('loginForm', 'login', '/includes/auth_handler.php', 'Login successful!');
   sendForm('registerForm', 'register', '/includes/auth_handler.php', 'Account created!');
   sendForm('profileForm', 'saveProfile', '/includes/profile_handler.php', 'Profile updated!', false);
+});
+
+
+// ================================
+// 🧠 Alpine Global Store Setup
+// ================================
+document.addEventListener('alpine:init', () => {
+  Alpine.store('auth', {
+    showLogin: false,
+    showRegister: false,
+    showProfile: false,
+    init() {},
+    openLogin() { this.closeAll(); this.showLogin = true },
+    openRegister() { this.closeAll(); this.showRegister = true },
+    openProfile() {
+      this.closeAll();
+      this.showProfile = true;
+      if (typeof loadProfile === 'function') loadProfile();
+    },
+    closeAll() {
+      this.showLogin = false;
+      this.showRegister = false;
+      this.showProfile = false;
+    }
+  });
+
+  Alpine.store('uploads', {
+    show: false,
+    files: [],
+    init() {
+      this.load();
+    },
+    async load() {
+      try {
+        const res = await fetch('/includes/upload_handler.php', {
+          method: 'POST',
+          body: new URLSearchParams({ action: 'list' })
+        });
+        const data = await res.json();
+        if (data.success) this.files = data.files;
+      } catch (err) {
+        console.error('[Upload List Error]', err);
+      }
+    },
+    async deleteFile(id) {
+      if (!confirm('Delete this file?')) return;
+      try {
+        const res = await fetch('/includes/upload_handler.php', {
+          method: 'POST',
+          body: new URLSearchParams({ action: 'delete', id })
+        });
+        const data = await res.json();
+        if (data.success) this.load();
+        else alert(data.message || 'Delete failed');
+      } catch (err) {
+        console.error('[Delete Upload Error]', err);
+      }
+    }
+  });
+
+  Alpine.store('modals', {
+    showUploads: false,
+    showMemory: false,
+  });
+
+  Alpine.store('sidebar', {
+    left: true,
+    right: true,
+  });
 });

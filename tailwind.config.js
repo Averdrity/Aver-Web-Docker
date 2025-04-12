@@ -5,17 +5,18 @@ module.exports = {
     "./components/**/*.{php,html}",
     "./auth/**/*.{php,html}",
     "./includes/**/*.{php,html}",
+    "./src/**/*.{php,html,js,svg}",
   ],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: '#2563eb',
-        secondary: '#1e293b', // Dark Slate
-        accent: '#f59e0b', // Warm yellow
-        neutral: '#64748b', // Cool gray
-        surface: '#f8fafc', // Very light
-        darkSurface: '#1f2937', // Dark gray
+        primary: '#2563eb',       // Blue
+        secondary: '#1e293b',     // Dark Slate
+        accent: '#f59e0b',        // Amber
+        neutral: '#64748b',       // Gray
+        surface: '#f8fafc',       // Light Surface
+        darkSurface: '#1f2937',   // Darker Surface
       },
       borderRadius: {
         'xl': '1rem',
@@ -36,8 +37,14 @@ module.exports = {
       keyframes: {
         fadeIn: {
           '0%': { opacity: 0, transform: 'translateY(10px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' } 
+          '100%': { opacity: 1, transform: 'translateY(0)' }
         }
+      },
+      fill: theme => theme('colors'),
+      stroke: theme => theme('colors'),
+      transitionTimingFunction: {
+        'in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
+        'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
       },
     },
   },
@@ -47,4 +54,4 @@ module.exports = {
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/line-clamp'),
   ],
-}
+};
