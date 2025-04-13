@@ -1,6 +1,12 @@
+## 🧠 AVER-WEB – Project Summary (April 2025)
+
 ---
 
-## 🧠 AVER-WEB – Project Summary (April 2025)
+## ✅ Project Status
+
+- **Repository**: [Averdrity/Aver-Web-Docker](https://github.com/Averdrity/Aver-Web-Docker)
+- **Purpose**: Aver-Web is a PHP-based AI chat application utilizing Alpine.js for interactivity, Tailwind CSS for styling, and Docker for containerization.
+- **Icons**: The project uses [Tabler Icons](https://tabler.io/icons) with the "outline" style.
 
 ---
 
@@ -138,87 +144,12 @@ Aver-Web is a **modern, AI-powered personal assistant platform** designed with:
 
 ---
 
-## ✅ Project Status (On going bug fixes and more)
-
-- **Repository**: [Averdrity/Aver-Web-Docker](https://github.com/Averdrity/Aver-Web-Docker)
-- **Purpose**: Aver-Web is a PHP-based AI chat application utilizing Alpine.js for interactivity, Tailwind CSS for styling, and Docker for containerization.
-- **Icons**: The project uses [Tabler Icons](https://tabler.io/icons) with the "outline" style.
-
----
-
-## 🔧 Key Fixes and Enhancements (Current Issues)
-
-### 1. **Sidebar Toggle Functionality**
-
-- **Issue**:Sidebars could only be closed via an "×" button within them, with no external toggle to reopen
-- **Solution**:Introduced external toggle buttons using the `square-toggle.svg` icon for both left and right sidebars
-- **Implementation**:
-  - **Left Sidebar Toggle**:
-    ```html
-    <div class="absolute top-4 left-4 z-20">
-      <button @click="$store.sidebar.left = !$store.sidebar.left" class="...">
-        <img src="/assets/icons/square-toggle.svg" alt="Toggle Left Sidebar" />
-      </button>
-    </div>
-    ```
-  - **Right Sidebar Toggle**:
-    ```html
-    <div class="absolute top-4 right-4 z-20">
-      <button @click="$store.sidebar.right = !$store.sidebar.right" class="...">
-        <img src="/assets/icons/square-toggle.svg" alt="Toggle Right Sidebar" />
-      </button>
-    </div>
-    ```
-  -These buttons are placed outside the sidebars and remain accessible regardless of the sidebar state
-
-### 2. **Theme Toggle Animation**
-
-- **Issue**:The theme toggle switch lacked smooth animation when switching between light and dark modes
-- **Solution**:Enhanced the toggle switch with Tailwind CSS transitions for a smoother user experience
-- **Implementation**:
-  -Added transition classes to the toggle switch elements
-    ```html
-    <span class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"></span>
-    ```
-  -Ensured the `transition-transform` class is applied for smooth movement
-
-### 3. **Alpine.js Store Initialization**
-
-- **Issue**:Encountered errors like `Alpine Expression Error: $store.modal is undefined`
-- **Solution**:Ensured all Alpine.js stores are properly initialized before use
-- **Implementation**:
-  -Defined the `modal` store during Alpine.js initialization
-    ```javascript
-    Alpine.store('modal', {
-      showMemory: false,
-      // other modal states...
-    });
-    ```
-  -Ensured this initialization occurs before any component attempts to access `$store.modal`
-
-### 4. **Tailwind CSS Configuration**
-
-- **Issue**:Custom animations and transitions were not functioning as expected
-- **Solution**:Updated `tailwind.config.js` to include necessary customizations
-- **Implementation**:
-  -Extended the theme with custom colors, border radii, fonts, shadows, animations, and keyframes
-  -Added custom transition timing functions
-    ```javascript
-    transitionTimingFunction: {
-      'in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
-      'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
-    },
-    ```
-  -Ensured the `content` array includes all relevant file paths for Tailwind to scan
-
----
-
 ## 🛠️ Additional Notes
 
-- **Icons*: The project utilizes [Tabler Icons](https://tabler.io/icons) in the "outline" style for UI elemens.
-- **Docker*: Docker is used for containerizing the application, with configurations defined in `Dockerfile` and `docker-compose.ym`.
-- **Styling*: Tailwind CSS is the primary styling framework, with custom configurations to suit the application's nees.
-- **Interactivity*: Alpine.js manages the application's interactivity, with stores initialized for authentication, uploads, modals, and sidebas.
+- **Icons*: The project utilizes [Tabler Icons](https://tabler.io/icons) in the "outline" style for UI elemens.
+- **Docker*: Docker is used for containerizing the application, with configurations defined in `Dockerfile` and `docker-compose.ym`.
+- **Styling*: Tailwind CSS is the primary styling framework, with custom configurations to suit the application's nees.
+- **Interactivity*: Alpine.js manages the application's interactivity, with stores initialized for authentication, uploads, modals, and sidebas.
 
 ---
 
